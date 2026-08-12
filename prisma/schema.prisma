@@ -1,0 +1,156 @@
+// Prisma schema for the Bangalore Real Estate Competition Analysis Portal
+// learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Zone {
+  NORTH
+  SOUTH
+  EAST
+  WEST
+  CENTRAL
+}
+
+enum DevelopmentType {
+  APARTMENT
+  VILLA
+  PLOTTED
+  COMMERCIAL
+  MIXED_USE
+  ROW_HOUSE
+}
+
+enum ProjectStatus {
+  NEW_LAUNCH
+  UNDER_CONSTRUCTION
+  READY_TO_MOVE
+  RESALE
+}
+
+enum Furnishing {
+  UNFURNISHED
+  SEMI_FURNISHED
+  FULLY_FURNISHED
+}
+
+model Locality {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  zone      Zone
+  latitude  Float?
+  longitude Float?
+  projects  Project[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Developer {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  tier      String? // e.g. "Tier 1", "Tier 2" — used for market-share/competitor analysis
+  website   String?
+  projects  Project[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Source {
+  id          String       @id @default(cuid())
+  name        String       @unique // e.g. "RERA Karnataka", "Manual Entry"
+  baseUrl     String?
+  adapterKey  String // matches a registered scraper adapter key
+  listings    Listing[]
+  scrapeRuns  ScrapeRun[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ScrapeRun {
+  id             String   @id @default(cuid())
+  source         Source   @relation(fields: [sourceId], references: [id])
+  sourceId       String
+  status         String // "success" | "partial" | "failed"
+  itemsFound     Int      @default(0)
+  itemsUpserted  Int      @default(0)
+  errorMessage   String?
+  startedAt      DateTime @default(now())
+  finishedAt     DateTime?
+}
+
+// A Project is a normalized, de-duplicated real-estate development.
+// Multiple raw Listings (from different sources) can resolve to one Project.
+model Project {
+  id              String          @id @default(cuid())
+  name            String
+  slug            String          @unique
+  developer       Developer?      @relation(fields: [developerId], references: [id])
+  developerId     String?
+  locality        Locality        @relation(fields: [localityId], references: [id])
+  localityId      String
+  type            DevelopmentType
+  status          ProjectStatus
+  configurations  String // JSON-encoded string array, e.g. ["2BHK","3BHK"]
+  minPriceLakh    Float?
+  maxPriceLakh    Float?
+  pricePerSqft    Float?
+  minAreaSqft     Float?
+  maxAreaSqft     Float?
+  totalUnits      Int?
+  possessionDate  DateTime?
+  reraId          String?
+  amenities       String? // JSON-encoded string array
+  description     String?
+  heroImageUrl    String?
+  latitude        Float?
+  longitude       Float?
+
+  listings        Listing[]
+  priceHistory    PriceSnapshot[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([localityId])
+  @@index([type])
+  @@index([status])
+}
+
+// A raw listing as observed from a specific source, before/alongside normalization.
+// Keeps provenance so every figure in the UI can be traced back to where it came from.
+model Listing {
+  id           String   @id @default(cuid())
+  project      Project? @relation(fields: [projectId], references: [id])
+  projectId    String?
+  source       Source   @relation(fields: [sourceId], references: [id])
+  sourceId     String
+  sourceUrl    String
+  rawTitle     String
+  rawPriceText String?
+  scrapedAt    DateTime @default(now())
+  raw          String? // JSON blob of the untouched scraped record, for audit/debugging
+
+  @@index([projectId])
+  @@index([sourceId])
+}
+
+// Historical price points for a project, enabling trend charts in the analytics view.
+model PriceSnapshot {
+  id           String   @id @default(cuid())
+  project      Project  @relation(fields: [projectId], references: [id])
+  projectId    String
+  pricePerSqft Float
+  recordedAt   DateTime @default(now())
+
+  @@index([projectId])
+}
