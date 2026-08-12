@@ -1,0 +1,33 @@
+<!--
+  Sample fixture representing the kind of listing-card markup a typical
+  aggregator/project microsite uses. The html-listing adapter parses this
+  structure with cheerio. Point ADAPTER_HTML_URL at a real page and adjust
+  the selectors in adapters/html-listing.ts once you've reviewed that
+  site's terms of service and robots.txt.
+-->
+<div class="listing-grid">
+  <article class="listing-card" data-url="https://example-listings.test/projects/sobha-neopolis">
+    <h2 class="listing-title">Sobha Neopolis</h2>
+    <span class="listing-developer">Sobha Limited</span>
+    <span class="listing-locality">Panathur, East Bangalore</span>
+    <span class="listing-type">Apartment</span>
+    <span class="listing-status">Ready to Move</span>
+    <span class="listing-configs">3BHK, 4BHK</span>
+    <span class="listing-price">₹1.6 Cr - ₹2.8 Cr</span>
+    <span class="listing-rate">₹9800/sqft</span>
+    <span class="listing-area">1650 - 2900 sqft</span>
+    <span class="listing-rera">PRM/KA/RERA/1251/309/PR/171019/002873</span>
+  </article>
+  <article class="listing-card" data-url="https://example-listings.test/projects/godrej-woodscapes">
+    <h2 class="listing-title">Godrej Woodscapes</h2>
+    <span class="listing-developer">Godrej Properties</span>
+    <span class="listing-locality">Budigere Cross, East Bangalore</span>
+    <span class="listing-type">Apartment</span>
+    <span class="listing-status">Under Construction</span>
+    <span class="listing-configs">1BHK, 2BHK, 3BHK</span>
+    <span class="listing-price">₹58 L - ₹1.2 Cr</span>
+    <span class="listing-rate">₹6900/sqft</span>
+    <span class="listing-area">640 - 1450 sqft</span>
+    <span class="listing-rera">PRM/KA/RERA/1251/446/PR/030621/004112</span>
+  </article>
+</div>

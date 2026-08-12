@@ -1,0 +1,36 @@
+[
+  {
+    "url": "https://example-listings.test/projects/prestige-cityscape",
+    "project_name": "Prestige Cityscape",
+    "builder": "Prestige Group",
+    "locality": "Sarjapur Road",
+    "zone": "EAST",
+    "category": "apartment",
+    "stage": "under_construction",
+    "unit_types": ["2BHK", "3BHK"],
+    "price_range": "₹85 L - ₹1.4 Cr",
+    "rate_per_sqft": 8200,
+    "carpet_area_min": 1050,
+    "carpet_area_max": 1780,
+    "possession": "2027-12-01",
+    "rera_no": "PRM/KA/RERA/1251/446/PR/010124/006789",
+    "amenities": ["Clubhouse", "Swimming Pool", "Gym", "Kids Play Area"]
+  },
+  {
+    "url": "https://example-listings.test/projects/brigade-eldorado",
+    "project_name": "Brigade Eldorado",
+    "builder": "Brigade Group",
+    "locality": "Devanahalli",
+    "zone": "NORTH",
+    "category": "plotted",
+    "stage": "new_launch",
+    "unit_types": ["Residential Plots"],
+    "price_range": "₹45 L - ₹1.1 Cr",
+    "rate_per_sqft": 5600,
+    "carpet_area_min": 1200,
+    "carpet_area_max": 2400,
+    "possession": null,
+    "rera_no": "PRM/KA/RERA/1251/447/PR/020524/009812",
+    "amenities": ["Clubhouse", "Landscaped Gardens", "Gated Community"]
+  }
+]
